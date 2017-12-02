@@ -126,10 +126,10 @@
    'package-archives
    '("org" . "http://orgmode.org/elpa/")
    )
-  (add-to-list
-   'package-archives
-   '("elpy" . "https://jorgenschaefer.github.io/packages/")
-   )
+;;  (add-to-list
+;;   'package-archives
+;;   '("elpy" . "https://jorgenschaefer.github.io/packages/")
+;;   )
   (package-initialize))
 
 ;; install any packages in my-packages, if they are not installed already
@@ -207,25 +207,25 @@
 (message "INFO: .emacs: setup: requires")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Flycheck syntax checking
+;; cl-lib
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (add-to-list 'load-path "/home/depappas/.emacs.d/cl-lib/")
 ;; (require 'cl-lib)
-
-(message "INFO: .emacs: setup: Requires setup")
-
 
 ;; (if (file-exists-p "/opt/emacs/emacs/emacs/lisp/emacs-lisp/cl-seq.el")
 ;;    (load-file "/opt/emacs/emacs/emacs/lisp/emacs-lisp/cl-seq.el"))
 
 ;; (require 'cl-seq)
 
+;; (message "INFO: .emacs: setup: cl-lib setup")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Jedi setup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;Jedi
+(require 'epc)
 (autoload 'jedi:setup "jedi" nil t)
 (add-hook 'python-mode-hook (lambda () (jedi:setup) ))
 
@@ -446,20 +446,32 @@
 
 (exec-path-from-shell-copy-env "PYTHONPATH")
 
-(setq venv-location (expand-file-name "~/python_ve"))   ;; Change with the path to your virtualenvs
+(setq venv-location (expand-file-name "~/python_virtual_env"))   ;; Change with the path to your virtualenvs
 ;; Used python-environment.el and by extend jedi.el
 (setq python-environment-directory venv-location)
 
 
 ;; https://realpython.com/blog/python/emacs-the-best-python-editor/
 
+(package-initialize)
 (elpy-enable)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Flycheck syntax checking
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+(add-hook 'python-mode-hook 'elpy-mode)
+
+(message "INFO: .emacs: setup: flycheck setup")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Required files
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
