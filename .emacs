@@ -76,10 +76,11 @@
     semantic
     speedbar    
     ecb
+    ein ;; add the ein package (Emacs ipython notebook)
     smartparens
     smart-tabs-mode
     python-mode
-    python-django
+;;    python-django
     ;; ack-and-a-half 
     auctex
     ;; clojure-mode
@@ -91,10 +92,12 @@
     haml-mode
     haskell-mode
     inf-ruby
+    magit ;; Git Integration (Magit)
     markdown-mode
     monokai-theme
     org
     paredit
+    py-autopep8
     projectile
     python
     sass-mode
@@ -409,23 +412,6 @@
  
  (global-font-lock-mode t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Using tj3 with Org mode
-;; To activate the Taskjuggler exporter in Org-mode, add this line to ~/.emacs:
-;; http://orgmode.org/worg/org-tutorials/org-taskjuggler.html
-;;http://www.taskjuggler.org/
-;;
-;; Copy this file :
-;; http://orgmode.org/w/?p=org-mode.git;a=blob_plain;f=contrib/lisp/ox-taskjuggler.el;hb=HEAD
-;; or
-;; https://github.com/exu/emacs.d/blob/master/elpa/org-plus-contrib-20130826/ox-taskjuggler.el
-;; to
-;; ~/emacs.d/lisp/ox-taskjuggler.el
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;(load-library "ox-taskjuggler.el")
-;;(add-to-list 'org-export-backends 'taskjuggler)
 
 (provide `.emacs)
 ;;; .emacs ends here
@@ -442,7 +428,9 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
-;; (exec-path-from-shell-copy-env "PYTHONPATH")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Python virtualenv 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (exec-path-from-shell-copy-env "PYTHONPATH")
 
@@ -450,11 +438,18 @@
 ;; Used python-environment.el and by extend jedi.el
 (setq python-environment-directory venv-location)
 
+(message "INFO: .emacs: setup: venv (python virtualenv)")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Flycheck syntax checking
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; https://realpython.com/blog/python/emacs-the-best-python-editor/
 
 (package-initialize)
 (elpy-enable)
+
+(message "INFO: .emacs: setup: elpy-enable")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Flycheck syntax checking
@@ -466,12 +461,24 @@
 
 (add-hook 'python-mode-hook 'elpy-mode)
 
-(message "INFO: .emacs: setup: flycheck setup")
-
+(message "INFO: .emacs: setup: flycheck")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Required files
+;; Pep8
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'py-autopep8)
+(add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
+
+(message "INFO: .emacs: setup: pep8")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Ipython
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(elpy-use-ipython)
+
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -578,3 +585,20 @@
 ;;         (t (indent-according-to-mode)))
 ;;   (setq this-command 'my-tab))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Using tj3 with Org mode
+;; To activate the Taskjuggler exporter in Org-mode, add this line to ~/.emacs:
+;; http://orgmode.org/worg/org-tutorials/org-taskjuggler.html
+;;http://www.taskjuggler.org/
+;;
+;; Copy this file :
+;; http://orgmode.org/w/?p=org-mode.git;a=blob_plain;f=contrib/lisp/ox-taskjuggler.el;hb=HEAD
+;; or
+;; https://github.com/exu/emacs.d/blob/master/elpa/org-plus-contrib-20130826/ox-taskjuggler.el
+;; to
+;; ~/emacs.d/lisp/ox-taskjuggler.el
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;(load-library "ox-taskjuggler.el")
+;;(add-to-list 'org-export-backends 'taskjuggler)
