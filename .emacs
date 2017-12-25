@@ -302,7 +302,6 @@
 ;; ; add more hooks here
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(put 'downcase-region 'disabled nil)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -344,7 +343,6 @@
 
 (if (file-exists-p "~/emacs/vtags.el")
     (load-file "~/emacs/vtags.el"))
-(put 'upcase-region 'disabled nil)
 
 (message "INFO: .emacs: setup: c-tags")
 
@@ -434,6 +432,8 @@
 
 (exec-path-from-shell-copy-env "PYTHONPATH")
 
+;;(setq venv-location (expand-file-name "~/python_virtual_env"))   ;; Change with the path to your virtualenvs
+
 (setq venv-location (expand-file-name "~/python_virtual_env"))   ;; Change with the path to your virtualenvs
 ;; Used python-environment.el and by extend jedi.el
 (setq python-environment-directory venv-location)
@@ -478,6 +478,18 @@
 
 (elpy-use-ipython)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Pyenv
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(elpy-enable)
+
+(defvar virtual_env_dir)
+(setq virtual_env_dir (substitute-env-vars "$WORKON_HOME"))
+(pyvenv-activate virtual_env_dir)
+;; (pyvenv-activate "/home/depappas/python_virtual_env")
+
+(setq gud-pdb-command-name "python -m pdb")
 
 
 
@@ -602,3 +614,5 @@
 
 ;;(load-library "ox-taskjuggler.el")
 ;;(add-to-list 'org-export-backends 'taskjuggler)
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
